@@ -1,16 +1,18 @@
 use rand::Rng;
 use crate::constants::{COLS, ROWS, TILE_HEIGHT, TILE_WIDTH};
+use crate::move_history::MoveHistory;
 
 #[derive(PartialEq, Eq)]
-pub enum GameState{
+pub enum GameState {
     PLAYING,
-    QUIT
+    QUIT,
 }
 
 pub struct Game {
     // option for dynamic in future
     board: Vec<Vec<bool>>,
-    pub game_state: GameState
+    history: MoveHistory,
+    pub game_state: GameState,
 }
 
 impl Game {
@@ -25,27 +27,39 @@ impl Game {
         }
         Game {
             board,
-            game_state: GameState::PLAYING
+            history: MoveHistory::new(),
+            game_state: GameState::PLAYING,
         }
     }
 
-    pub fn next_level(&mut self, difficulty: usize){
-        for _ in 0..difficulty{
+    pub fn next_level(&mut self, difficulty: usize) {
+        self.history.empty();
+        for _ in 0..difficulty {
             let x = rand::thread_rng().gen_range(0..COLS);
             let y = rand::thread_rng().gen_range(0..ROWS);
             self.press_at_tile(x, y);
         }
     }
 
-    pub fn level_finished(&self) -> bool{
+    pub fn level_finished(&self) -> bool {
         for y in 0..ROWS {
             for x in 0..COLS {
                 if self.board[y][x] {
-                    return false
+                    return false;
                 }
             }
         }
-        return true
+        return true;
+    }
+
+    pub fn undo_move(&mut self) {
+        if self.history.len() == 0{
+            return;
+        }
+        let last_move = self.history.pop_board_state();
+        for (index, char) in last_move.chars().enumerate() {
+            self.board[index / ROWS][index % COLS] = char == '1';
+        }
     }
 
     pub fn get_tile_state(&self, x: usize, y: usize) -> bool {
@@ -53,12 +67,13 @@ impl Game {
     }
 
     pub fn press_at_coord(&mut self, x: i32, y: i32) {
+        self.history.save_board_state(&self.board);
         let converted_x = (x as u32 / TILE_WIDTH) as usize;
         let converted_y = (y as u32 / TILE_HEIGHT) as usize;
         self.press_at_tile(converted_x, converted_y);
     }
 
-    fn press_at_tile(&mut self, x: usize, y:usize){
+    fn press_at_tile(&mut self, x: usize, y: usize) {
         self.change_at_coord(x, y);
         if y > 0 {
             self.change_at_coord(x, y - 1);

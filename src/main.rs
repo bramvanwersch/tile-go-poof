@@ -8,6 +8,7 @@ mod window;
 mod input;
 mod game;
 mod constants;
+mod move_history;
 
 fn main() {
     let sdl_context = sdl2::init().unwrap();
