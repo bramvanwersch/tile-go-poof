@@ -1,6 +1,6 @@
 extern crate sdl2;
 
-use crate::game::Game;
+use crate::game::{Game, GameState};
 use crate::input::Input;
 use crate::window::Display;
 
@@ -15,8 +15,17 @@ fn main() {
     let mut input = Input::new(&sdl_context);
 
     let mut game = Game::new();
-
-    while let Ok(_keypad) = input.handle_events(&mut game){
+    let mut difficulty = 1;
+    game.next_level(difficulty);
+    while game.game_state == GameState::PLAYING{
+        input.handle_events(&mut game);
+        if game.game_state == GameState::QUIT {
+            break;
+        }
+        if game.level_finished(){
+            difficulty += 1;
+            game.next_level(difficulty)
+        }
         display.refresh(&game);
     }
 }

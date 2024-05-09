@@ -1,6 +1,6 @@
 use sdl2;
 use sdl2::event::Event;
-use crate::game::Game;
+use crate::game::{Game, GameState};
 
 
 pub struct Input {
@@ -14,16 +14,15 @@ impl Input {
         }
     }
 
-    pub fn handle_events(&mut self, game: &mut Game) -> Result<bool, ()> {
+    pub fn handle_events(&mut self, game: &mut Game) {
         for event in self.events.poll_iter() {
             match event {
-                Event::Quit { .. } => return Err(()),
+                Event::Quit { .. } => game.game_state = GameState::QUIT,
                 Event::MouseButtonDown { x, y,.. } => {
                     game.press_at_coord(x, y);
                 }
                 _ => { }
             }
         }
-        return Ok(true)
     }
 }
