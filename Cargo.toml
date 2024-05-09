@@ -12,3 +12,4 @@ rand = "0.8.5"
 [dependencies.sdl2]
 version = "0.36"
 default-features = false
+features = ["ttf"]

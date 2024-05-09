@@ -3,16 +3,19 @@ extern crate sdl2;
 use sdl2::pixels;
 use sdl2::rect::Rect;
 use sdl2::render::Canvas;
+use sdl2::ttf::{Font, Sdl2TtfContext};
 use sdl2::video::Window;
 use crate::constants::{ACTIVE_COLOR, BORDER_COLOR, COLS, HEIGHT, INACTIVE_COLOR, ROWS, TILE_HEIGHT, TILE_WIDTH, WIDTH};
 use crate::game::Game;
 
-pub struct Display {
+pub struct Display<'a> {
     canvas: Canvas<Window>,
+    font: Font<'a, 'a>
 }
 
-impl Display {
-    pub fn new(sdl_context: &sdl2::Sdl) -> Self {
+impl<'a> Display<'a> {
+    pub fn new(sdl_context: &sdl2::Sdl, mut font: Font<'a, 'a>) -> Self {
+        font.set_style(sdl2::ttf::FontStyle::BOLD);
         let video_subsystem = sdl_context.video().unwrap();
 
         let window = video_subsystem.window("tile-go-poof", WIDTH, HEIGHT)
@@ -25,6 +28,7 @@ impl Display {
         canvas.present();
         Display {
             canvas,
+            font
         }
     }
 

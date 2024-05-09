@@ -12,7 +12,10 @@ mod move_history;
 
 fn main() {
     let sdl_context = sdl2::init().unwrap();
-    let mut display = Display::new(&sdl_context);
+    let ttf_context = sdl2::ttf::init().unwrap();
+    let mut font = ttf_context.load_font("./data/Boxy-Bold.ttf", 128).expect("Failed to read font");
+
+    let mut display = Display::new(&sdl_context, font);
     let mut input = Input::new(&sdl_context);
 
     let mut game = Game::new();

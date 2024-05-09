@@ -35,3 +35,5 @@ Where current toolchain is likely stable-x86_64-pc-windows-gnu.
     into your cargo project, right next to your Cargo.toml.
 
     When you're shipping your game make sure to copy SDL2.dll to the same directory that your compiled exe is in, otherwise the game won't launch.
+
+for tff download https://github.com/libsdl-org/SDL_ttf/releases and do the same
