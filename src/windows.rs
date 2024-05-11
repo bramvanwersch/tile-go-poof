@@ -83,7 +83,7 @@ impl<'a> GameDisplay<'a> {
         }
         let mut text = format!("You scored: {:.2}\n", game.score);
         for (index, score) in scores.iter().enumerate(){
-            text.push_str(format!("{}. {}\n", index + 1, score).as_str());
+            text.push_str(format!("{}. {:.2}\n", index + 1, score).as_str());
             if index == 9{
                 break;
             }

@@ -1,3 +1,4 @@
+use std::collections::HashSet;
 use std::fs;
 use std::fs::File;
 use std::path::Path;
@@ -57,11 +58,18 @@ impl Game {
         self.difficulty += 1;
         self.level += 1;
         self.level_start_time = std::time::Instant::now();
-        let level_create_history = MoveHistory::new();
-        for _ in 0..self.difficulty {
+        let mut level_create_history = MoveHistory::new();
+        let mut covered_states: HashSet<String> = HashSet::new();
+        let mut counter = 0;
+        while counter < self.difficulty{
             let x = rand::thread_rng().gen_range(0..COLS);
             let y = rand::thread_rng().gen_range(0..ROWS);
             self.press_at_tile(x, y);
+            let state = level_create_history.get_state_string(&self.board);
+            if !covered_states.contains(&state){
+                covered_states.insert(state);
+                counter += 1;
+            }
         }
         self.game_state = GameState::Playing;
     }
@@ -80,7 +88,7 @@ impl Game {
         let mut new_contents = String::new();
         scores.sort_by(|a, b| b.partial_cmp(a).unwrap());
         for (index, num) in scores.iter().enumerate(){
-            new_contents.push_str(format!("{:.2}", num).as_str());
+            new_contents.push_str(format!("{}", num).as_str());
             new_contents.push_str("\n");
             if index == 9{
                 break;

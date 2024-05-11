@@ -12,6 +12,11 @@ impl MoveHistory{
     }
 
     pub fn save_board_state(&mut self, board: &Vec<Vec<bool>>){
+        let sequence = self.get_state_string(board);
+        self.buffer.push(sequence);
+    }
+
+    pub fn get_state_string(&self, board: &Vec<Vec<bool>>) -> String{
         let mut sequence: String = String::new();
         for y in 0..ROWS {
             for x in 0..COLS {
@@ -23,7 +28,7 @@ impl MoveHistory{
                 }
             }
         }
-        self.buffer.push(sequence);
+        return sequence;
     }
 
     pub fn empty(&mut self){
