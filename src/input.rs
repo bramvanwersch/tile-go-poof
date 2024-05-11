@@ -21,7 +21,7 @@ impl Input {
     pub fn handle_events(&mut self, game: &mut Game) {
         for event in self.events.poll_iter() {
             match event {
-                Event::Quit { .. } => game.game_state = GameState::QUIT,
+                Event::Quit { .. } => game.game_state = GameState::Quit,
                 Event::MouseButtonDown { x, y,.. } => {
                     game.press_at_coord(x, y);
                 },
@@ -40,6 +40,12 @@ impl Input {
                 Keycode::Backspace => {
                     game.undo_move();
                 },
+                Keycode::R => {
+                    game.game_state = GameState::NewGame;
+                },
+                Keycode::F =>{
+                    game.game_state = GameState::LostGame;
+                }
                 _ => {}
             }
         }
