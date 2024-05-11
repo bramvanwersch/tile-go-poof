@@ -1,7 +1,6 @@
 extern crate sdl2;
 
 use std::fs;
-use std::io::Read;
 use sdl2::pixels;
 use sdl2::rect::Rect;
 use sdl2::render::{Canvas, TextureCreator};
@@ -76,7 +75,7 @@ impl<'a> GameDisplay<'a> {
 
     fn draw_highscore(&mut self, game: &Game){
         let hs_path = "./data/highscores.txt";
-        let mut contents = fs::read_to_string(hs_path).expect("Failed to read the highscore file");
+        let contents = fs::read_to_string(hs_path).expect("Failed to read the highscore file");
         let mut scores: Vec<f32> = Vec::new();
         for line in contents.lines(){
             scores.push(line.parse::<f32>().unwrap())

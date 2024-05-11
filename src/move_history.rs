@@ -35,7 +35,7 @@ impl MoveHistory{
         self.buffer = Vec::new();
     }
 
-    pub fn get_board_state(&self, offset: usize) -> &String{
+    pub fn _get_board_state(&self, offset: usize) -> &String{
         self.buffer.get(self.buffer.len() - 1 - offset).expect("History value out of range")
     }
 

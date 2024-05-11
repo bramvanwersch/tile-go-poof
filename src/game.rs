@@ -58,7 +58,7 @@ impl Game {
         self.difficulty += 1;
         self.level += 1;
         self.level_start_time = std::time::Instant::now();
-        let mut level_create_history = MoveHistory::new();
+        let level_create_history = MoveHistory::new();
         let mut covered_states: HashSet<String> = HashSet::new();
         let mut counter = 0;
         while counter < self.difficulty{
@@ -79,7 +79,7 @@ impl Game {
         if !Path::new(hs_path).exists(){
             File::create(hs_path).expect("Failed to create the highscore file");
         }
-        let mut contents = fs::read_to_string(hs_path).expect("Failed to read the highscore file");
+        let contents = fs::read_to_string(hs_path).expect("Failed to read the highscore file");
         let mut scores: Vec<f32> = Vec::new();
         scores.push(self.score);
         for line in contents.lines(){

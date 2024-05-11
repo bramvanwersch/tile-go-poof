@@ -44,7 +44,9 @@ impl Input {
                     game.game_state = GameState::NewGame;
                 },
                 Keycode::F =>{
-                    game.game_state = GameState::LostGame;
+                    if game.game_state == GameState::Playing{
+                        game.game_state = GameState::LostGame;
+                    }
                 }
                 _ => {}
             }
